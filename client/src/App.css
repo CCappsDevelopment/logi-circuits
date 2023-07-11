@@ -1,0 +1,43 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.app-container {
+  background-color: #FFA2C1;
+  height: 100vh; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  font-size: calc(24px + 2vmin);
+  color: white;
+}
+
+.stage {
+  flex-grow: 1;
+  overflow-y: hidden;
+  max-height: 100vh; 
+}
+
+.btn-container {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  padding-bottom: 5px;
+  /* have the component buttons be 20% from the bottom of the screen */
+  position: absolute;
+  bottom: 2%;
+  width: 100%;
+
+}
+
+.btn-add-component {
+  background-color: #FBFFFE;
+  text-align: center;
+  width: 10em;
+  height: 3em;
+  box-shadow: 5px 5px 0px 0px black;
+}
