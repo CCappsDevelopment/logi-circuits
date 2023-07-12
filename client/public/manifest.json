@@ -1,7 +1,11 @@
 {
   "short_name": "Logi-Circuits",
   "name": "Logi-Circuits",
-  "icons": [],
+  "icons": [{
+    "src": "favicon.ico",
+    "sizes": "16x16",
+    "type": "image/x-icon"
+  }],
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",

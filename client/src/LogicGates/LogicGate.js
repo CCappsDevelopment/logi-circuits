@@ -1,36 +1,17 @@
-import React from "react";
+import React, { Component } from "react";
 import { Rect, Circle, Text, Group } from "react-konva";
 
-class LogicGate extends React.Component {
-  constructor(props) {
-    super(props);
-    this.outputRef = React.createRef();
-    this.handleOutputMouseUp = this.handleOutputMouseUp.bind(this);
-  }
-
+class LogicGate extends Component {
   componentWidth = 125;
   componentHeight = 60;
   state = {
     x: window.innerWidth / 2 - this.componentWidth / 2,
     y: window.innerHeight / 2 - this.componentHeight / 2,
     isCircleClicked: false,
+    connectedInputs: [false, false],
     input1Color: "#FD69C1",
     input2Color: "#FD69C1",
     outputColor: "#BC85F2",
-    input1Position: {
-      x: window.innerWidth / 2 - this.componentWidth / 2,
-      y:
-        window.innerHeight / 2 -
-        this.componentHeight / 2 +
-        this.componentHeight / 4,
-    },
-    input2Position: {
-      x: window.innerWidth / 2 - this.componentWidth / 2,
-      y:
-        window.innerHeight / 2 -
-        this.componentHeight / 2 +
-        (this.componentHeight * 3) / 4,
-    },
   };
 
   handleDragMove = (e) => {
@@ -74,6 +55,7 @@ class LogicGate extends React.Component {
     } else {
       this.setState({ input2Color: "#BC85F2" });
     }
+
     window.addEventListener("mouseup", {
       handleEvent: this.handleInputMouseUp.bind(this, inputNode),
     });
@@ -94,29 +76,36 @@ class LogicGate extends React.Component {
   handleOutputMouseDown = (e) => {
     this.setState({ isCircleClicked: true, outputColor: "#FD69C1" });
     const { x, y } = e.target.getAbsolutePosition();
-    console.log("x, y", x, y);
+    this.props.setLineStartPosition(x, y, this.props.id);
   
     window.removeEventListener("mouseup", this.handleOutputMouseUp);
     window.addEventListener("mouseup", this.handleOutputMouseUp);
-  }; 
+  };
 
   handleOutputMouseUp = (e) => {
     this.setState({ isCircleClicked: false, outputColor: "#BC85F2" });
-  
+    console.log(this.state);
     window.removeEventListener("mouseup", this.handleOutputMouseUp);
   };
-  
+
   componentDidUpdate(prevProps, prevState) {
-    if (
-      this.state.x !== prevState.x ||
-      this.state.y !== prevState.y
-    ) {
+    if (this.state.x !== prevState.x || this.state.y !== prevState.y) {
       this.props.updateGate(this.props.id, {
-        input1Position: this.state.input1Position,
-        input2Position: this.state.input2Position,
+        x: this.state.x, 
+        y: this.state.y,
+        input1Position: {
+          x: this.state.x,
+          y: this.state.y + this.componentHeight / 4,
+        },
+        input2Position: {
+          x: this.state.x,
+          y: this.state.y + (this.componentHeight * 3) / 4,
+        },
+        connectedInputs: this.state.connectedInputs,
       });
     }
   }
+  
 
   componentWillUnmount() {
     window.removeEventListener("mouseup", this.handleOutputMouseUp);
@@ -188,7 +177,6 @@ class LogicGate extends React.Component {
             stroke="#000000"
             strokeWidth={2}
             onMouseDown={(e) => this.handleOutputMouseDown(e)}
-            onMouseUp={this.handleOutputMouseUp}
           />
         </Group>
       </>
